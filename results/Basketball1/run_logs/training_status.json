@@ -1,0 +1,65 @@
+{
+    "MLAgent": {
+        "checkpoints": [
+            {
+                "steps": 1499970,
+                "file_path": "results\\Basketball1\\MLAgent\\MLAgent-1499970.onnx",
+                "reward": 14.659315145514311,
+                "creation_time": 1779127290.763909,
+                "auxillary_file_paths": [
+                    "results\\Basketball1\\MLAgent\\MLAgent-1499970.pt"
+                ]
+            },
+            {
+                "steps": 1999987,
+                "file_path": "results\\Basketball1\\MLAgent\\MLAgent-1999987.onnx",
+                "reward": 14.669094188793286,
+                "creation_time": 1779127527.268606,
+                "auxillary_file_paths": [
+                    "results\\Basketball1\\MLAgent\\MLAgent-1999987.pt"
+                ]
+            },
+            {
+                "steps": 2499971,
+                "file_path": "results\\Basketball1\\MLAgent\\MLAgent-2499971.onnx",
+                "reward": 14.666734090325429,
+                "creation_time": 1779127766.267702,
+                "auxillary_file_paths": [
+                    "results\\Basketball1\\MLAgent\\MLAgent-2499971.pt"
+                ]
+            },
+            {
+                "steps": 2999972,
+                "file_path": "results\\Basketball1\\MLAgent\\MLAgent-2999972.onnx",
+                "reward": 14.666200753581316,
+                "creation_time": 1779128003.5891705,
+                "auxillary_file_paths": [
+                    "results\\Basketball1\\MLAgent\\MLAgent-2999972.pt"
+                ]
+            },
+            {
+                "steps": 3000002,
+                "file_path": "results\\Basketball1\\MLAgent\\MLAgent-3000002.onnx",
+                "reward": 14.666257069028656,
+                "creation_time": 1779128003.6123827,
+                "auxillary_file_paths": [
+                    "results\\Basketball1\\MLAgent\\MLAgent-3000002.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3000002,
+            "file_path": "results\\Basketball1\\MLAgent.onnx",
+            "reward": 14.666257069028656,
+            "creation_time": 1779128003.6123827,
+            "auxillary_file_paths": [
+                "results\\Basketball1\\MLAgent\\MLAgent-3000002.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}
