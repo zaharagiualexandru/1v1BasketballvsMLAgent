@@ -160,4 +160,4 @@ For standalone builds, the enabled scenes are **MainMenu**, followed by **MLBask
 
 This project explores the connection between **gameplay programming and reinforcement learning**: building interactive mechanics, defining useful observations and rewards, and coordinating AI episodes with an ongoing basketball match.
 
-It is a portfolio prototype, with agent behaviour dependent on the selected model and scene configuration. The repository also contains third-party art and example content alongside the basketball gameplay implementation.
+It is a portfolio prototype, with agent behaviour dependent on the selected model and scene configuration. The repository also contains third-party art and example content alongside the basketball gameplay implementation; these should be distinguished from the gameplay code and assets.
