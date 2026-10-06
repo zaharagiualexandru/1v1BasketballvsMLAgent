@@ -96,8 +96,4 @@ The package manifest specifies **Unity ML-Agents 3.0.0** and **Universal Render 
 
 For standalone builds, the project lists `MainMenu` followed by `MLBasketballArena` as enabled scenes.
 
-## Project Scope
-
-This is a gameplay and reinforcement learning portfolio prototype. Its technical focus is on C# gameplay systems, Rigidbody interactions, calculated shot trajectories, probabilistic stealing, reward design, and coordinating training episodes with an ongoing match.
-
 The repository includes third-party art and example content; these should be distinguished from the basketball gameplay implementation. Agent performance depends on the selected model and scene configuration.
