@@ -1,103 +1,163 @@
 # 🏀 1v1 Basketball vs ML Agent
 
-A **3D single-player basketball game** built with **Unity and C#**, featuring an opponent powered by **Unity ML-Agents**. Compete for possession, steal the ball, and score baskets in a race to **21 points**.
+**1v1 Basketball vs ML Agent** is a 3D basketball game built in **Unity and C#**, featuring an opponent powered by **Unity ML-Agents**.
 
-The project combines basketball gameplay systems with a reinforcement learning environment, exploring agent observations, action selection, reward shaping, and episode resets.
+Compete for possession, steal the ball, and score baskets in a race to **21 points**. The project combines basketball gameplay with a reinforcement learning environment, exploring how rewards and observations influence an agent's decisions.
 
-## Gameplay
+> Built with Unity 6, C#, and Unity ML-Agents.
 
-- **One-on-one basketball:** Play against an ML agent that can move, rotate, shoot, and attempt steals.
-- **One- and two-point scoring:** Baskets are worth one point at close range or two points when released at least 7 world units from the hoop, measured horizontally.
-- **Winner stays on offence:** The scorer keeps possession, with play restarting from a randomly selected possession start point.
-- **12-second shot clock:** Running out of time transfers possession to the opponent.
-- **Automatic pickup and dribbling:** Colliding with a loose ball collects it; a procedural bounce follows its owner while held.
-- **Jump shots:** Shooting calculates a ballistic arc towards an assigned hoop target and adds a jump when grounded.
-- **Stealing:** Success depends on distance and facing direction, with a cooldown between attempts.
-- **Feedback and UI:** Score counters, possession status, shot clock, green/red backboard feedback, and a procedural net reaction.
-- **Match flow:** Main menu, winner panel, restart, and return-to-menu actions.
+---
 
-## Controls
+## 🎮 Gameplay
+
+Play a one-on-one match against an AI opponent that can move, rotate, shoot, and attempt steals.
+
+- 🏆 **First to 21** — Reach the target score before your opponent.
+- 🎯 **One- and two-point baskets** — Score one point at close range or two when shooting from at least 7 world units away, measured horizontally.
+- 🔄 **Scorer keeps possession** — After a basket, the scorer restarts with the ball at a randomly selected possession start point.
+- ⏱️ **12-second shot clock** — Take a shot before time runs out or lose possession.
+- 🏀 **Automatic pickup and dribbling** — Collect a loose ball by touching it and dribble while holding possession.
+- 🦘 **Jump shots** — Launch the ball along a calculated arc towards the hoop, with a jump when grounded.
+- 🤏 **Stealing** — Challenge your opponent for the ball, with success influenced by distance and facing direction.
+
+---
+
+## ✨ Feedback and Match Flow
+
+- **Live score counters** for the player and agent.
+- **Possession status** showing who currently holds the ball.
+- **Shot-clock display** to keep track of remaining possession time.
+- **Green and red backboard feedback** for baskets and miss-trigger events.
+- **Procedural net movement** when a basket is scored.
+- **Main menu and winner panel**, with restart and return-to-menu actions.
+
+---
+
+## 🕹️ Controls
 
 | Input | Action |
 | --- | --- |
-| W / A / S / D or arrow keys | Move |
-| Mouse | Turn and look around |
-| Left mouse button | Shoot while holding the ball |
-| F | Attempt to steal |
-| Escape | Toggle cursor lock and visibility |
-| Touch a loose ball | Pick it up automatically |
+| **W / A / S / D or arrow keys** | Move |
+| **Mouse** | Turn and look around |
+| **Left mouse button** | Shoot while holding the ball |
+| **F** | Attempt to steal |
+| **Escape** | Toggle cursor lock and visibility |
+| **Touch a loose ball** | Pick it up automatically |
 
-Shots target the assigned hoop; this is not a free-aim or hold-to-charge shooting system. Escape toggles the cursor rather than pausing the match.
+Shots use a calculated trajectory towards the assigned hoop target. Escape releases or locks the cursor; it does not pause the match.
 
-## AI and Reinforcement Learning
+---
 
-The basketball agent uses a mixture of continuous and discrete actions:
+## 🧠 Machine Learning
+
+The basketball opponent uses **reinforcement learning**, supported by observations, actions, and rewards defined in the gameplay code.
+
+### 👀 Agent Observations
+
+The agent receives **37 vector observations**, including:
+
+- Its position and velocity.
+- The ball's position and velocity.
+- Hoop and opponent positions.
+- Directions and distances to relevant objects.
+- Player and agent possession states.
+- Alignment with the hoop and shooting-zone information.
+- Time spent holding the ball.
+
+### ⚙️ Agent Actions
 
 | Action type | Purpose |
 | --- | --- |
-| 3 continuous actions | Forward/backward movement, strafing, and rotation |
-| 1 discrete branch with 3 options | No additional action, shoot, or steal |
+| **3 continuous actions** | Forward/backward movement, strafing, and rotation |
+| **1 discrete branch** | Choose between no additional action, shooting, or stealing |
 
-The agent collects **37 vector observations**, including its position and velocity, ball position and velocity, hoop and opponent positions, relative directions, possession state, distances, facing alignment, shooting-zone flags, and elapsed hold time.
+**Action masking** prevents the agent from selecting a shot without possession or a steal when the player does not hold the ball.
 
-**Action masking** disables shooting when the agent does not own the ball and disables stealing when the player does not own it.
+### 🎯 Rewards and Penalties
 
-### Reward shaping
+Rewards encourage the agent to:
 
-Rewards encourage collecting the ball, approaching a loose ball, facing the hoop, occupying useful shooting positions, scoring, stealing, and staying near the player when defending.
+- Collect and approach a loose ball.
+- Face the hoop and occupy useful shooting positions.
+- Score baskets and successfully steal possession.
+- Stay near the player while defending.
 
-Penalties discourage rushed or contested shots, poor shooting positions, turnovers, and holding possession too long. A separate hold timer forces the agent to shoot after its configured limit. This combines learned decisions with explicit gameplay rules.
+Penalties discourage rushed or contested shots, poor shot selection, turnovers, and holding the ball too long. A separate possession timer forces a shot after the agent's configured hold limit.
 
-The environment ends episodes and resets play after baskets, shot-clock violations, shot timeouts, loose-ball timeouts, episode timeouts, or the ball falling below the arena. Match scores persist across these resets until the match ends or is restarted.
+The opponent therefore combines **learned decisions with explicit gameplay rules**.
 
-### Training configuration
+### 🔄 Episode Management
 
-[`Assets/MLAgent.yaml`](Assets/MLAgent.yaml) defines a **PPO (Proximal Policy Optimization)** trainer for the `MLAgent` behaviour:
+The environment resets play after baskets, shot-clock violations, shot timeouts, loose-ball timeouts, episode timeouts, or the ball falling below the arena.
+
+Match scores carry over between these resets until the match ends or is restarted.
+
+---
+
+## 📊 Training Configuration
+
+[`Assets/MLAgent.yaml`](Assets/MLAgent.yaml) contains a **PPO — Proximal Policy Optimization** configuration for the `MLAgent` behaviour.
 
 | Setting | Value |
 | --- | --- |
-| Hidden layers | 2 |
-| Hidden units per layer | 128 |
-| Observation normalization | Enabled |
-| Learning rate | 0.0003 |
-| Batch size | 64 |
-| Buffer size | 12,000 |
-| Maximum steps | 1,000,000 |
+| **Hidden layers** | 2 |
+| **Hidden units per layer** | 128 |
+| **Observation normalization** | Enabled |
+| **Learning rate** | 0.0003 |
+| **Batch size** | 64 |
+| **Buffer size** | 12,000 |
+| **Maximum steps** | 1,000,000 |
 
-These values describe the supplied configuration, not a verified training duration or performance result. The repository also contains exported ONNX models and previous training outputs.
+These are the supplied configuration values, rather than a verified training duration or performance result. The repository also includes exported **ONNX models** and previous training outputs.
 
-## Code Overview
+---
 
-The basketball scripts are in [`Assets/Scripts`](Assets/Scripts).
+## 🛠️ Technical Highlights
 
-| Script | Responsibility |
+- **C# gameplay systems** for movement, possession, shooting, and scoring.
+- **Rigidbody interactions** and calculated ballistic shot trajectories.
+- **Procedural dribbling** and net feedback.
+- **Probabilistic stealing** based on distance and facing direction.
+- **ML-Agents observations, action masking, and reward shaping**.
+- **Environment resets** that support repeated training episodes within a match.
+
+### 📂 Main Scripts
+
+| Script | Purpose |
 | --- | --- |
-| `BasketballAgent.cs` | Observations, actions, movement, shooting, stealing, action masking, and rewards |
-| `PlayerBasketballController.cs` | Player movement, mouse look, shooting, stealing, and cursor control |
-| `BasketballBall.cs` | Ownership, procedural dribbling, physics release, shooter tracking, and ball resets |
-| `BasketballEnvController.cs` | Scoring, possession, shot clock, episode resets, match state, and UI |
-| `HoopScoreTrigger.cs` | Basket detection, downward-motion validation, and duplicate-score protection |
-| `BackboardFeedback.cs` | Temporary score/miss colour changes |
+| `BasketballAgent.cs` | Agent observations, actions, rewards, movement, shooting, and stealing |
+| `PlayerBasketballController.cs` | Player movement, camera controls, shooting, and stealing |
+| `BasketballBall.cs` | Ownership, dribbling, ball release, shooter tracking, and resets |
+| `BasketballEnvController.cs` | Scores, possession, shot clock, episode resets, and match UI |
+| `HoopScoreTrigger.cs` | Basket detection and duplicate-score protection |
+| `BackboardFeedback.cs` | Backboard colour feedback |
 | `MissTrigger.cs` | Miss-trigger feedback |
-| `NetReaction.cs` | Procedural net wobble and squash after a basket |
+| `NetReaction.cs` | Net wobble and squash after a basket |
 | `MainMenuManager.cs` | Start-game and quit actions |
 
-`MLAgent.cs` is a separate target-reaching example, not the basketball opponent. The repository also contains Penguin example content alongside the basketball project.
+The basketball scripts are in [`Assets/Scripts`](Assets/Scripts). The separate `MLAgent.cs` script and Penguin example content are learning examples rather than the basketball opponent.
 
-## Opening the Project
+---
 
-1. Clone or download this repository.
-2. Add its root folder in Unity Hub.
-3. Open it with **Unity 6000.0.32f1**, the version recorded in `ProjectSettings/ProjectVersion.txt`.
-4. Allow Unity to import assets and resolve the included package manifest.
-5. Open `Assets/Scenes/MainMenu.unity` and enter Play mode, or open `Assets/Scenes/MLBasketballArena.unity` to inspect the arena directly.
+## 🚀 Running the Project
 
-The package manifest specifies **Unity ML-Agents 3.0.0** and **Universal Render Pipeline 17.0.3**. The basketball agent prefab references an included ONNX model in `Assets/AgentONX`.
+1. **Clone or download** the repository.
+2. Add the project folder in **Unity Hub**.
+3. Open it with **Unity 6000.0.32f1**.
+4. Allow Unity to import assets and resolve packages.
+5. Open **`Assets/Scenes/MainMenu.unity`**.
+6. Press **Play** and start the game.
 
-For standalone builds, the project lists `MainMenu` followed by `MLBasketballArena` as enabled scenes.
+You can also open **`Assets/Scenes/MLBasketballArena.unity`** directly to inspect the arena.
 
-## Project Scope
+The project uses **Unity ML-Agents 3.0.0** and **Universal Render Pipeline 17.0.3**. The basketball agent prefab references an included ONNX model in `Assets/AgentONX`.
 
-This is a gameplay and reinforcement learning portfolio prototype. Its technical focus is on C# gameplay systems, Rigidbody interactions, calculated shot trajectories, probabilistic stealing, reward design, and coordinating training episodes with an ongoing match.
+For standalone builds, the enabled scenes are **MainMenu**, followed by **MLBasketballArena**.
 
-The repository includes third-party art and example content; these should be distinguished from the basketball gameplay implementation. Agent performance depends on the selected model and scene configuration.
+---
+
+## 💡 Project Focus
+
+This project explores the connection between **gameplay programming and reinforcement learning**: building interactive mechanics, defining useful observations and rewards, and coordinating AI episodes with an ongoing basketball match.
+
+It is a portfolio prototype, with agent behaviour dependent on the selected model and scene configuration. The repository also contains third-party art and example content alongside the basketball gameplay implementation.
